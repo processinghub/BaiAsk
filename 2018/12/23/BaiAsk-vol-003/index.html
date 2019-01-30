@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/BaiAsk/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/BaiAsk/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/BaiAsk/images/bai.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/BaiAsk/images/bai-32.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/BaiAsk/images/bai-16.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/BaiAsk/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/BaiAsk/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="点和圆的接触初中数学曾经学过：圆的判定公式 $$x^2+y^2=r^2$$ 所以想要求解一点是否在圆内，只需判断 \(x^2+y^2\) 和 \(r^2\) 的关系即可；前者大于后者，则意味着点在圆外前者小于后者，则意味着点在圆内前者等于后者，则意味着点在圆上 同时为了消除圆本身的位置偏移，需要减去圆心的偏移量（a，b） $$(x-a)^2+(y-b)^2=r^2$$ 程序如下：12345678">
+<meta name="keywords" content="Processing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【第三期】圆与方块的接触">
+<meta property="og:url" content="https://aalab-cn.github.io/BaiAsk/2018/12/23/BaiAsk-vol-003/index.html">
+<meta property="og:site_name" content="白问">
+<meta property="og:description" content="点和圆的接触初中数学曾经学过：圆的判定公式 $$x^2+y^2=r^2$$ 所以想要求解一点是否在圆内，只需判断 \(x^2+y^2\) 和 \(r^2\) 的关系即可；前者大于后者，则意味着点在圆外前者小于后者，则意味着点在圆内前者等于后者，则意味着点在圆上 同时为了消除圆本身的位置偏移，需要减去圆心的偏移量（a，b） $$(x-a)^2+(y-b)^2=r^2$$ 程序如下：12345678">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/23/BaiAsk-vol-003/1.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/23/BaiAsk-vol-003/2.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/23/BaiAsk-vol-003/3.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/23/BaiAsk-vol-003/4.jpg">
+<meta property="og:updated_time" content="2019-01-30T10:00:19.647Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【第三期】圆与方块的接触">
+<meta name="twitter:description" content="点和圆的接触初中数学曾经学过：圆的判定公式 $$x^2+y^2=r^2$$ 所以想要求解一点是否在圆内，只需判断 \(x^2+y^2\) 和 \(r^2\) 的关系即可；前者大于后者，则意味着点在圆外前者小于后者，则意味着点在圆内前者等于后者，则意味着点在圆上 同时为了消除圆本身的位置偏移，需要减去圆心的偏移量（a，b） $$(x-a)^2+(y-b)^2=r^2$$ 程序如下：12345678">
+<meta name="twitter:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/23/BaiAsk-vol-003/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://aalab-cn.github.io/BaiAsk/2018/12/23/BaiAsk-vol-003/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【第三期】圆与方块的接触 | 白问</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/BaiAsk/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白问</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2018/12/23/BaiAsk-vol-003/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="墨白">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/BaiAsk/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白问">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【第三期】圆与方块的接触
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-23 00:00:00" itemprop="dateCreated datePublished" datetime="2018-12-23T00:00:00+08:00">2018-12-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-30 18:00:19" itemprop="dateModified" datetime="2019-01-30T18:00:19+08:00">2019-01-30</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script> -->
+<h4 id="点和圆的接触"><a href="#点和圆的接触" class="headerlink" title="点和圆的接触"></a>点和圆的接触</h4><p>初中数学曾经学过：圆的判定公式</p>
+<p>$$x^2+y^2=r^2$$</p>
+<p>所以想要求解一点是否在圆内，只需判断 \(x^2+y^2\) 和 \(r^2\) 的关系即可；<br><br>前者大于后者，则意味着点在圆外<br><br>前者小于后者，则意味着点在圆内<br><br>前者等于后者，则意味着点在圆上<br></p>
+<p>同时为了消除圆本身的位置偏移，需要减去圆心的偏移量（a，b）</p>
+<p>$$(x-a)^2+(y-b)^2=r^2$$</p>
+<p>程序如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> a=<span class="number">200</span>, b=<span class="number">200</span>, x, y;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">400</span>, <span class="number">400</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">100</span>);</span><br><span class="line">  x = mouseX;</span><br><span class="line">  y = mouseY;</span><br><span class="line"></span><br><span class="line">  ellipse(a, b, <span class="number">120</span>, <span class="number">120</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (sq(x - a) + sq(y - b) &lt;= sq(<span class="number">60</span>))</span><br><span class="line">    fill(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">    fill(<span class="number">255</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="圆和圆的接触"><a href="#圆和圆的接触" class="headerlink" title="圆和圆的接触"></a>圆和圆的接触</h4><p>圆与圆的接触也很简单，只需要检测两个圆心点的距离是否小于半径之和即可<br><br>原理和上面的实质是相同的：即检测（A圆心——B圆心）两点间的距离</p>
+<p>$$(Xa-Xb)^2+(Ya-Yb)^2=(Ra+Rb)^2$$</p>
+<p>（其中 Xa Ya 代表圆A的坐标，Xb Yb 代表圆B的坐标，Ra Rb 代表两圆的半径）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PVector Ca = <span class="keyword">new</span> PVector(<span class="number">100</span>, <span class="number">100</span>);  <span class="comment">//圆 A</span></span><br><span class="line">PVector Cb = <span class="keyword">new</span> PVector(<span class="number">200</span>, <span class="number">200</span>);  <span class="comment">//圆 B</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">400</span>, <span class="number">400</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">0</span>);</span><br><span class="line">  Ca = <span class="keyword">new</span> PVector(mouseX, mouseY);</span><br><span class="line">  </span><br><span class="line">  ellipse(Ca.x, Ca.y, <span class="number">120</span>, <span class="number">120</span>);</span><br><span class="line">  ellipse(Cb.x, Cb.y, <span class="number">80</span>, <span class="number">80</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (sq(Ca.x - Cb.x) + sq(Ca.y - Cb.y) &lt;= sq(<span class="number">60</span>+<span class="number">40</span>))</span><br><span class="line">    fill(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">    fill(<span class="number">255</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者直接使用Processing计算距离的函数dist()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (PVector.dist(Ca, Cb) &lt;= <span class="number">60</span>+<span class="number">40</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="圆和方块的接触"><a href="#圆和方块的接触" class="headerlink" title="圆和方块的接触"></a>圆和方块的接触</h4><p>圆和方块的接触<br>只需将上面的方法稍作扩展即可<br></p>
+<p>计算距离的两点，从（圆心——圆心），变成了（圆心——方块上离圆心最近的点）<br><br><strong>这时，问题转化成了：</strong><br><em>如何计算出方块上距圆心最近的点？</em><br><br><br>我们先规定：以方块左上角为坐标点，然后只考虑X方向，假设出不同条件：<br><br><img src="/BaiAsk/2018/12/23/BaiAsk-vol-003/1.jpg"></p>
+<p> —— <strong>以下是只考虑  X方向  时的三种条件：</strong>——</p>
+<h5 id="条件一："><a href="#条件一：" class="headerlink" title="条件一："></a>条件一：</h5><p>方块顶点在圆心点右侧：<br><br><img src="/BaiAsk/2018/12/23/BaiAsk-vol-003/2.jpg"><br>可以看出，方块距圆心最近的X，是顶点：<strong>Rx</strong></p>
+<hr>
+<h5 id="条件二："><a href="#条件二：" class="headerlink" title="条件二："></a>条件二：</h5><p>方块顶点已经到了圆心另一侧，但其他部分还没有完全移动到另一侧：<br><br><img src="/BaiAsk/2018/12/23/BaiAsk-vol-003/3.jpg"><br>可以看出，方块距圆心最近的X，是圆心：<strong>Cx</strong></p>
+<hr>
+<h5 id="条件三："><a href="#条件三：" class="headerlink" title="条件三："></a>条件三：</h5><p>整个方块已经完全移动到了圆心另一侧：<br><br><img src="/BaiAsk/2018/12/23/BaiAsk-vol-003/4.jpg"><br>可以看出，方块距圆心最近的X，是方块顶点+方块宽度：<strong>Rx+Rw</strong></p>
+<hr>
+<p>这样一来，就可以写出X方向上，方块距离圆心最近距离的计算公式：</p>
+<p>$$Px = max(Rx,min(Rx+Rw, Cx))$$</p>
+<p>用程序表达起来也很简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(Rx &gt; Cx)&#123;            <span class="comment">//条件一</span></span><br><span class="line">    Px = Rx;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(Rx+Rw &gt; Cx)&#123;    <span class="comment">//条件二</span></span><br><span class="line">    Px = Cx;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(Rx+Rw &lt; Cx)&#123;    <span class="comment">//条件三</span></span><br><span class="line">    Px = Rx+Rw;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同理，Y方向上一样能写出：</p>
+<p>$$Py = max(Ry,min(Ry+Rh, Cy))$$</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(Ry &gt; Cy)&#123;            <span class="comment">//条件一</span></span><br><span class="line">    Py = Ry;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(Ry+Rh &gt; Cy)&#123;    <span class="comment">//条件二</span></span><br><span class="line">    Py = Cy;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(Ry+Rh &lt; Cy)&#123;    <span class="comment">//条件三</span></span><br><span class="line">    Py = Ry+Rh;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>得到<strong>Px</strong>和<strong>Py</strong>后，我们就回到了最原始的方法：</p>
+<p>$$(Cx-Px)^2+(Cy-Py)^2=Cr^2$$</p>
+<p>为了避免if语句表达起来太累赘，可以直接使用min() max()函数来表示公式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Px = max(Rx, min(Rx+Rw, Cx));</span><br><span class="line">Py = max(Ry, min(Ry+Rh, Cy));</span><br></pre></td></tr></table></figure>
+<p>最终程序：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> Cx, Cy;</span><br><span class="line"><span class="keyword">float</span> Px, Py;</span><br><span class="line"><span class="keyword">float</span> Rx=<span class="number">150</span>, Ry=<span class="number">150</span>, Rw=<span class="number">100</span>, Rh=<span class="number">100</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">400</span>, <span class="number">400</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  Cx = mouseX;</span><br><span class="line">  Cy = mouseY;</span><br><span class="line">  ellipse(Cx, Cy, <span class="number">100</span>, <span class="number">100</span>);</span><br><span class="line">  rect(Rx, Ry, Rw, Rh);</span><br><span class="line"></span><br><span class="line">  Px = max(Rx, min(Rx+Rw, Cx));</span><br><span class="line">  Py = max(Ry, min(Ry+Rh, Cy));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (sq(Cx - Px) + sq(Cy - Py) &lt;= sq(<span class="number">50</span>))</span><br><span class="line">    fill(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">    fill(<span class="number">255</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>本期引用</strong>：</p>
+<blockquote>
+<p><a href="https://yal.cc/rectangle-circle-intersection-test/" target="_blank" rel="noopener">https://yal.cc/rectangle-circle-intersection-test/</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/BaiAsk/tags/Processing/" rel="tag"># Processing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/BaiAsk/2018/12/14/BaiAsk_vol_002/" rel="next" title="【第二期】角度与弧度的转换问题">
+                <i class="fa fa-chevron-left"></i> 【第二期】角度与弧度的转换问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/BaiAsk/2019/01/03/BaiAsk-vol-004/" rel="prev" title="【第四期】矩形的旋转相切">
+                【第四期】矩形的旋转相切 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/BaiAsk/images/avatar.jpg" alt="墨白">
+            
+              <p class="site-author-name" itemprop="name">墨白</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/BaiAsk/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/BaiAsk/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#点和圆的接触"><span class="nav-number">1.</span> <span class="nav-text">点和圆的接触</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#圆和圆的接触"><span class="nav-number">2.</span> <span class="nav-text">圆和圆的接触</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#圆和方块的接触"><span class="nav-number">3.</span> <span class="nav-text">圆和方块的接触</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#条件一："><span class="nav-number">3.1.</span> <span class="nav-text">条件一：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#条件二："><span class="nav-number">3.2.</span> <span class="nav-text">条件二：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#条件三："><span class="nav-number">3.3.</span> <span class="nav-text">条件三：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">墨白</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/BaiAsk/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/BaiAsk/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/BaiAsk/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/BaiAsk/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

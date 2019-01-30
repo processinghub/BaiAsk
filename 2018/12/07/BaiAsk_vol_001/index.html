@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/BaiAsk/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/BaiAsk/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/BaiAsk/images/bai.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/BaiAsk/images/bai-32.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/BaiAsk/images/bai-16.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/BaiAsk/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/BaiAsk/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Processing 一共有7种绘制模式，9种写法  置空 JAVA2D（等价于置空） P2D P3D OPENGL（等价于P3D） FX2D PDF SVG DXF  我们接下来详细阐述每一种绘制模式：  JAVA2D（或置空）123456void setup()&amp;#123;    size(500, 500, JAVA2D);&amp;#125;void setup()&amp;#123;    size(5">
+<meta name="keywords" content="Processing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【第一期】Processing中的绘制模式">
+<meta property="og:url" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/index.html">
+<meta property="og:site_name" content="白问">
+<meta property="og:description" content="Processing 一共有7种绘制模式，9种写法  置空 JAVA2D（等价于置空） P2D P3D OPENGL（等价于P3D） FX2D PDF SVG DXF  我们接下来详细阐述每一种绘制模式：  JAVA2D（或置空）123456void setup()&amp;#123;    size(500, 500, JAVA2D);&amp;#125;void setup()&amp;#123;    size(5">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/0.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/1.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/2.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/3.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/4.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/5.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/6.jpg">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/7.jpg">
+<meta property="og:updated_time" content="2019-01-30T10:00:18.670Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【第一期】Processing中的绘制模式">
+<meta name="twitter:description" content="Processing 一共有7种绘制模式，9种写法  置空 JAVA2D（等价于置空） P2D P3D OPENGL（等价于P3D） FX2D PDF SVG DXF  我们接下来详细阐述每一种绘制模式：  JAVA2D（或置空）123456void setup()&amp;#123;    size(500, 500, JAVA2D);&amp;#125;void setup()&amp;#123;    size(5">
+<meta name="twitter:image" content="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/0.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【第一期】Processing中的绘制模式 | 白问</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/BaiAsk/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白问</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2018/12/07/BaiAsk_vol_001/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="墨白">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/BaiAsk/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白问">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【第一期】Processing中的绘制模式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-07 00:00:00" itemprop="dateCreated datePublished" datetime="2018-12-07T00:00:00+08:00">2018-12-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-30 18:00:18" itemprop="dateModified" datetime="2019-01-30T18:00:18+08:00">2019-01-30</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>Processing 一共有7种绘制模式，9种写法</strong></p>
+<ul>
+<li>置空</li>
+<li>JAVA2D（等价于置空）</li>
+<li>P2D</li>
+<li>P3D</li>
+<li>OPENGL（等价于P3D）</li>
+<li>FX2D</li>
+<li>PDF</li>
+<li>SVG</li>
+<li>DXF</li>
+</ul>
+<p><strong>我们接下来详细阐述每一种绘制模式：</strong></p>
+<hr>
+<h2 id="JAVA2D（或置空）"><a href="#JAVA2D（或置空）" class="headerlink" title="JAVA2D（或置空）"></a>JAVA2D（或置空）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, JAVA2D);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此模式调用Java中最原始的awt模块，使用CPU渲染，没有GPU开销。<br>优点：支持平台最广，bug最少，渲染效果一般；<br>缺点：不支持3D渲染，帧率不稳定；</p>
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/0.jpg">
+<hr>
+<h2 id="P2D"><a href="#P2D" class="headerlink" title="P2D"></a>P2D</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, P2D);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此模式调用Java OpenGL进行绘制，有GPU开销；<br>优点：帧率相对稳定，可自由调节抗锯齿程度；<br>缺点：不支持3D渲染，在某些非主流显卡上无法正常运行； </p>
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/1.jpg">
+<hr>
+<h2 id="P3D（或OPENGL）"><a href="#P3D（或OPENGL）" class="headerlink" title="P3D（或OPENGL）"></a>P3D（或OPENGL）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, P3D);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, OPENGL);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此模式和P2D类似，调用Java OpenGL进行绘制，有GPU开销；<br>优点：支持3D渲染，性能最好，可定制性最高；<br>缺点：在某些非主流显卡上无法正常运行；</p>
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/2.jpg">
+<hr>
+<h2 id="FX2D"><a href="#FX2D" class="headerlink" title="FX2D"></a>FX2D</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, FX2D);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此模式使用JavaFX实现，可一定程度上调用操作系统的DirectX和OpenGL进行绘制，有GPU开销;<br>优点：效果细腻，支持平台广；<br>缺点：无法自由调节抗锯齿，逻辑帧率稳定，但显示帧率不太稳定，有一定的bug；</p>
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/3.jpg">
+<hr>
+<h2 id="PDF"><a href="#PDF" class="headerlink" title="PDF"></a>PDF</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, PDF, <span class="string">"rect.pdf"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>or<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, Java2D/P2D/P3D/FX2D);</span><br><span class="line">    </span><br><span class="line">    beginRecord(PDF, <span class="string">"rect.pdf"</span>);</span><br><span class="line">    ...</span><br><span class="line">    endRecord();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此模式直接将绘制结果保存为PDF文件，文件内包含矢量图元；<br>优点：精准，细腻，适合高分辨率打印；<br>缺点：保存3D场景时会有摄像机裁剪的问题；</p>
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/4.jpg">
+<hr>
+<h2 id="SVG"><a href="#SVG" class="headerlink" title="SVG"></a>SVG</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, SVG, <span class="string">"rect.svg"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>or<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, Java2D/P2D/P3D/FX2D);</span><br><span class="line">    </span><br><span class="line">    beginRecord(SVG, <span class="string">"rect.svg"</span>);</span><br><span class="line">    ...</span><br><span class="line">    endRecord();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此模式直接将绘图结果保存为SVG矢量图文件；<br>优点：同上，可以直接在网页中使用，对设计师友好；<br>缺点：同上；</p>
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/5.jpg">
+<hr>
+<h2 id="DXF"><a href="#DXF" class="headerlink" title="DXF"></a>DXF</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, DXF, <span class="string">"rect.dxf"</span>);</span><br><span class="line">&#125;</span><br><span class="line">    或</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">    size(<span class="number">500</span>, <span class="number">500</span>, P2D/P3D/FX2D);</span><br><span class="line">    </span><br><span class="line">    beginRaw(DXF, <span class="string">"rect.dxf"</span>);</span><br><span class="line">    ...</span><br><span class="line">    endRaw();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此模式可以导出DXF格式的3D场景文件，提供给后续工作流；<br>优点：emmmm 真的非常强；<br>缺点：不支持动画；</p>
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/6.jpg">
+<img src="/BaiAsk/2018/12/07/BaiAsk_vol_001/7.jpg">
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/BaiAsk/tags/Processing/" rel="tag"># Processing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/BaiAsk/2018/12/01/hello-world/" rel="next" title="《白问》的起源">
+                <i class="fa fa-chevron-left"></i> 《白问》的起源
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/BaiAsk/2018/12/14/BaiAsk_vol_002/" rel="prev" title="【第二期】角度与弧度的转换问题">
+                【第二期】角度与弧度的转换问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/BaiAsk/images/avatar.jpg" alt="墨白">
+            
+              <p class="site-author-name" itemprop="name">墨白</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/BaiAsk/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/BaiAsk/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JAVA2D（或置空）"><span class="nav-number">1.</span> <span class="nav-text">JAVA2D（或置空）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P2D"><span class="nav-number">2.</span> <span class="nav-text">P2D</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P3D（或OPENGL）"><span class="nav-number">3.</span> <span class="nav-text">P3D（或OPENGL）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FX2D"><span class="nav-number">4.</span> <span class="nav-text">FX2D</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PDF"><span class="nav-number">5.</span> <span class="nav-text">PDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVG"><span class="nav-number">6.</span> <span class="nav-text">SVG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DXF"><span class="nav-number">7.</span> <span class="nav-text">DXF</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">墨白</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/BaiAsk/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/BaiAsk/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/BaiAsk/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/BaiAsk/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

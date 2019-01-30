@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/BaiAsk/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/BaiAsk/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/BaiAsk/images/bai.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/BaiAsk/images/bai-32.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/BaiAsk/images/bai-16.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/BaiAsk/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/BaiAsk/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="角度与弧度的转换radians() 和 degrees()12println(radians(180));  // 3.1415927println(degrees(PI));   // 180.0 这应该是最正式的回答了 然而，作为Java的衍生产物，Processing支持非常多的Java特性；其中，就包括我们接下来要说的：Java的数学函数库：java.lang.Math;  Math.to">
+<meta name="keywords" content="Processing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【第二期】角度与弧度的转换问题">
+<meta property="og:url" content="https://aalab-cn.github.io/BaiAsk/2018/12/14/BaiAsk_vol_002/index.html">
+<meta property="og:site_name" content="白问">
+<meta property="og:description" content="角度与弧度的转换radians() 和 degrees()12println(radians(180));  // 3.1415927println(degrees(PI));   // 180.0 这应该是最正式的回答了 然而，作为Java的衍生产物，Processing支持非常多的Java特性；其中，就包括我们接下来要说的：Java的数学函数库：java.lang.Math;  Math.to">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-30T08:19:34.638Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【第二期】角度与弧度的转换问题">
+<meta name="twitter:description" content="角度与弧度的转换radians() 和 degrees()12println(radians(180));  // 3.1415927println(degrees(PI));   // 180.0 这应该是最正式的回答了 然而，作为Java的衍生产物，Processing支持非常多的Java特性；其中，就包括我们接下来要说的：Java的数学函数库：java.lang.Math;  Math.to">
+
+
+
+
+
+
+  <link rel="canonical" href="https://aalab-cn.github.io/BaiAsk/2018/12/14/BaiAsk_vol_002/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【第二期】角度与弧度的转换问题 | 白问</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/BaiAsk/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白问</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2018/12/14/BaiAsk_vol_002/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="墨白">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/BaiAsk/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白问">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【第二期】角度与弧度的转换问题
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-14 00:00:00" itemprop="dateCreated datePublished" datetime="2018-12-14T00:00:00+08:00">2018-12-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-30 16:19:34" itemprop="dateModified" datetime="2019-01-30T16:19:34+08:00">2019-01-30</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="角度与弧度的转换"><a href="#角度与弧度的转换" class="headerlink" title="角度与弧度的转换"></a>角度与弧度的转换</h1><h4 id="radians-和-degrees"><a href="#radians-和-degrees" class="headerlink" title="radians() 和 degrees()"></a>radians() 和 degrees()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">println(radians(<span class="number">180</span>));  <span class="comment">// 3.1415927</span></span><br><span class="line">println(degrees(PI));   <span class="comment">// 180.0</span></span><br></pre></td></tr></table></figure>
+<p>这应该是最正式的回答了</p>
+<p>然而，作为Java的衍生产物，Processing支持非常多的Java特性；<br>其中，就包括我们接下来要说的：<br>Java的数学函数库：java.lang.Math;</p>
+<hr>
+<h4 id="Math-toRadians-和-Math-toDegrees"><a href="#Math-toRadians-和-Math-toDegrees" class="headerlink" title="Math.toRadians() 和 Math.toDegrees()"></a>Math.toRadians() 和 Math.toDegrees()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">println(Math.toRadians(<span class="number">180</span>));       <span class="comment">// 3.141592653589793</span></span><br><span class="line">println(Math.toDegrees(Math.PI));   <span class="comment">// 180.0</span></span><br></pre></td></tr></table></figure>
+<p>无需在开头写 import，直接用即可<br>原生函数的特点是计算结果更精确（使用double类型的数据，支持15-16个有效数字的精确度）<br>相比于Processing原生的7-8个有效数字，要精确了不少；</p>
+<hr>
+<h4 id="DEG-TO-RAD-和-RAD-TO-DEG"><a href="#DEG-TO-RAD-和-RAD-TO-DEG" class="headerlink" title="DEG_TO_RAD 和 RAD_TO_DEG"></a>DEG_TO_RAD 和 RAD_TO_DEG</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="number">180</span> * DEG_TO_RAD);  <span class="comment">// 3.1415927</span></span><br><span class="line">println(PI * RAD_TO_DEG);   <span class="comment">// 180.0</span></span><br></pre></td></tr></table></figure>
+<p>这是Processing提供的另一个快捷的方法：<br>内置数据中有两个变量，<strong>DEG_TO_RAD</strong> 和 <strong>RAD_TO_DEG</strong><br>它们的定义方式分别是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEG_TO_RAD = <span class="number">0.017453292F</span>;  <span class="comment">// PI÷180</span></span><br><span class="line">RAD_TO_DEG = <span class="number">57.295776F</span>;    <span class="comment">// 180÷PI</span></span><br></pre></td></tr></table></figure>
+<p>也就意味着，我们可以直接在弧度数据上乘以<strong>RAD_TO_DEG</strong>，或在角度数据上乘以<strong>DEG_TO_RAD</strong>即可完成转换；</p>
+<hr>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/BaiAsk/tags/Processing/" rel="tag"># Processing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/BaiAsk/2018/12/07/BaiAsk_vol_001/" rel="next" title="【第一期】Processing中的绘制模式">
+                <i class="fa fa-chevron-left"></i> 【第一期】Processing中的绘制模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/BaiAsk/2018/12/23/BaiAsk-vol-003/" rel="prev" title="【第三期】圆与方块的接触">
+                【第三期】圆与方块的接触 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/BaiAsk/images/avatar.jpg" alt="墨白">
+            
+              <p class="site-author-name" itemprop="name">墨白</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/BaiAsk/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/BaiAsk/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#角度与弧度的转换"><span class="nav-number">1.</span> <span class="nav-text">角度与弧度的转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#radians-和-degrees"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">radians() 和 degrees()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Math-toRadians-和-Math-toDegrees"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">Math.toRadians() 和 Math.toDegrees()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DEG-TO-RAD-和-RAD-TO-DEG"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">DEG_TO_RAD 和 RAD_TO_DEG</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">墨白</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/BaiAsk/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/BaiAsk/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/BaiAsk/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/BaiAsk/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
