@@ -285,6 +285,191 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2019/02/24/BaiAsk-vol-005/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="墨白">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/BaiAsk/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白问">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/BaiAsk/2019/02/24/BaiAsk-vol-005/" class="post-title-link" itemprop="url">【第五期】制作PDE启动画面</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-24 15:28:31" itemprop="dateCreated datePublished" datetime="2019-02-24T15:28:31+08:00">2019-02-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-25 03:14:35" itemprop="dateModified" datetime="2019-02-25T03:14:35+08:00">2019-02-25</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本期知识点密度：★★★★✩</p>
+<p>上一期留下的问题是：<br>一：如何实现Processing启动界面的渐变线条<br>二：如何复刻完整的启动界面</p>
+<p><center> <b>仔细分辨一下哪个是原版</b> </center><img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/compare2.png"></p>
+<h1 id="渐变线条"><a href="#渐变线条" class="headerlink" title="渐变线条"></a>渐变线条</h1><p>首先说说如何绘制渐变色的线条<br>如果去查Processing的官网，官网会给出这样的建议：<a href="https://processing.org/examples/lineargradient.html" target="_blank" rel="noopener">https://processing.org/examples/lineargradient.html</a><br>这种方法从本质上阐述了渐变是如何实现的（把所有的颜色一个个画出来）<br>但是，<strong>这种方法的计算效率很低</strong><br>而且，<strong>用起来很麻烦</strong><br>你可能会想：诺大一个Processing，居然连渐变函数都没有内置吗？！<br>答案是：<strong>没有内置</strong><br>但是，我们可以用一种巧妙的方式<br>借助内置功能实现渐变绘制</p>
+<p>即：<strong>使用OpenGL特性</strong></p>
+<p>在原生OpenGL中，渐变线条可以这样绘制：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">glBegin( GL_LINE_STRIP );</span><br><span class="line">    glColor3f( 设置为起点颜色 );</span><br><span class="line">    glVertex3f( 起点 );</span><br><span class="line">    glColor3f( 设置为终点颜色 );</span><br><span class="line">    glVertex3f( 终点 );</span><br><span class="line">glEnd();</span><br></pre></td></tr></table></figure></p>
+<p>Processing虽然没有直接公开OpenGL的函数<br>但是也做了相应的封装<br>写法类似上文：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">beginShape(LINES);   <span class="comment">//括号里声明的是我们需要绘制的元素类型，这里写LINES即可，除此之外还有 POINTS TRIANGLES TRIANGLE_STRIP TRIANGLE_FAN QUADS QUAD_STRIP 六种绘制方法</span></span><br><span class="line">    stroke( 设置为起点颜色 );</span><br><span class="line">    vertex( 起点 );</span><br><span class="line">    stroke( 设置为终点颜色 );</span><br><span class="line">    vertex( 终点 );</span><br><span class="line">endShape();</span><br></pre></td></tr></table></figure></p>
+<p>如果按照这个写法把代码写出来，就会出现这样的情况：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">400</span>, <span class="number">400</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">0</span>);</span><br><span class="line">  beginShape(LINES);</span><br><span class="line">  stroke( <span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span> );</span><br><span class="line">  vertex( <span class="number">100</span>, <span class="number">100</span> );</span><br><span class="line">  stroke( <span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span> );</span><br><span class="line">  vertex( <span class="number">300</span>, <span class="number">300</span> );</span><br><span class="line">  endShape();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img1.png">
+<p>线条并没有渐变<br>原因是绘制模式并非OpenGL，而是Java2D<br>这一点在  <a href="https://aalab-cn.github.io/BaiAsk/2018/12/07/BaiAsk_vol_001/">【白问】第一期</a>  中有提及<br>只有当初始化的时候启用OpenGL相关模式<br>才能使用OpenGL的相关的特性<br>稍加修改：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">size(<span class="number">400</span>, <span class="number">400</span>, P2D);</span><br></pre></td></tr></table></figure></p>
+<p>即可生效：<br><img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img2.png"></p>
+<hr>
+<h1 id="Plexus效果"><a href="#Plexus效果" class="headerlink" title="Plexus效果"></a>Plexus效果</h1><p>实现了线条渐变<br>再来谈谈如何实现网状结构<br>更确切一点应该叫做 Plexus 效果<br>熟悉AE的朋友肯定会想起著名的 <strong>Plexus插件</strong><br><img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img3.png">其实Plexus的英文释义就是： <strong>n. （血管、淋巴管、神经等的）[解剖] 丛</strong><br>是不是非常形象~</p>
+<p>Plexus 的实现原理也非常简单<br>1：循环遍历所有点，计算每两个点间的距离<br>2：如果两点间距小于一定程度<br>3：就在两点间画一条线</p>
+<p>用程序表达就是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;PVector&gt; points = <span class="keyword">new</span> ArrayList&lt;PVector&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">400</span>, <span class="number">400</span>, P2D);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">100</span>; i++) &#123;</span><br><span class="line">    points.add(<span class="keyword">new</span> PVector(random(width), random(height)));</span><br><span class="line">  &#125; <span class="comment">//随机生成100个点</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">255</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;points.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;points.size(); j++) &#123;</span><br><span class="line">      <span class="keyword">float</span> dist = PVector.dist(points.get(i), points.get(j));  <span class="comment">//计算两点间的距离</span></span><br><span class="line">      <span class="keyword">if</span> (i!=j &amp;&amp; dist &lt; <span class="number">60</span>) &#123; <span class="comment">//如果距离小于60</span></span><br><span class="line">        line(points.get(i).x, points.get(i).y, points.get(j).x, points.get(j).y);</span><br><span class="line">      &#125;  <span class="comment">//在两点之间画线</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img4.png">
+<p>稍作美化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;PVector&gt; points = <span class="keyword">new</span> ArrayList&lt;PVector&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">400</span>, <span class="number">400</span>, P2D);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">100</span>; i++) &#123;</span><br><span class="line">    points.add(<span class="keyword">new</span> PVector(random(width), random(height)));</span><br><span class="line">  &#125; <span class="comment">//随机生成100个点</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;points.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;points.size(); j++) &#123;</span><br><span class="line">      <span class="keyword">float</span> dist = PVector.dist(points.get(i), points.get(j));  <span class="comment">//计算两点间的距离</span></span><br><span class="line">      <span class="keyword">if</span> (i!=j &amp;&amp; dist &lt; <span class="number">60</span>) &#123; <span class="comment">//如果距离小于60</span></span><br><span class="line">        stroke(<span class="number">255</span>, map(dist, <span class="number">0</span>, <span class="number">60</span>, <span class="number">60</span>, <span class="number">0</span>)); <span class="comment">//将距离映射为线条透明度</span></span><br><span class="line">        line(points.get(i).x, points.get(i).y, points.get(j).x, points.get(j).y);</span><br><span class="line">      &#125;  <span class="comment">//在两点之间画线</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img5.png">
+<p>用上面提到的渐变色绘制方法替代line函数:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;PVector&gt; points = <span class="keyword">new</span> ArrayList&lt;PVector&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">400</span>, <span class="number">400</span>, P2D);</span><br><span class="line">  colorMode(HSB);  <span class="comment">//颜色模式调整为HSB模式</span></span><br><span class="line">  strokeWeight(<span class="number">2</span>); <span class="comment">//线条粗细调整为2</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">100</span>; i++) &#123;</span><br><span class="line">    points.add(<span class="keyword">new</span> PVector(random(width), random(height)));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;points.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;points.size(); j++) &#123;</span><br><span class="line">      <span class="keyword">float</span> dist = PVector.dist(points.get(i), points.get(j));</span><br><span class="line">      <span class="keyword">if</span> (i!=j &amp;&amp; dist &lt; <span class="number">80</span>) &#123;</span><br><span class="line">        beginShape(LINES);</span><br><span class="line">        stroke(random(<span class="number">255</span>), random(<span class="number">255</span>), random(<span class="number">255</span>), map(dist, <span class="number">0</span>, <span class="number">80</span>, <span class="number">100</span>, <span class="number">0</span>)); <span class="comment">//随机生成颜色</span></span><br><span class="line">        vertex(points.get(i).x, points.get(i).y);</span><br><span class="line">        stroke(random(<span class="number">255</span>), random(<span class="number">255</span>), random(<span class="number">255</span>), map(dist, <span class="number">0</span>, <span class="number">80</span>, <span class="number">100</span>, <span class="number">0</span>)); <span class="comment">//随机生成颜色</span></span><br><span class="line">        vertex(points.get(j).x, points.get(j).y);</span><br><span class="line">        endShape();</span><br><span class="line">      &#125; <span class="comment">//用渐变色绘制方法替代line函数</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  noLoop(); <span class="comment">//暂停画面，避免每帧刷新随机颜色</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img6.png">
+<hr>
+<h1 id="Json数据读写"><a href="#Json数据读写" class="headerlink" title="Json数据读写"></a>Json数据读写</h1><p>由于粒子的位置是完全随机的<br>所以并不是每次随机的结果都会很好看<br>有时候会分布的比较均匀<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img7.png">也有时候会聚在一坨<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img8.png"><br>所以为了和原图保持一致<br>就需要精确记录每个点的位置</p>
+<p>首先在原图的上标记每个点的位置<br>然后使用Json文件来存储这些位置<br><img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/gif1.gif"><br>标记工具代码如下：</p>
+<p><strong>相关下载（右键 - 另存为）</strong><br><strong><a href="https://raw.githubusercontent.com/ElementMo/ProcessingTrickyMove/master/TrickyMove3/Tool/Tool.pde" target="_blank" rel="noopener">工具代码</a></strong><br><strong><a href="https://raw.githubusercontent.com/ElementMo/ProcessingTrickyMove/master/TrickyMove3/Tool/cover.png" target="_blank" rel="noopener">PDE原图</a></strong><br><strong><a href="https://raw.githubusercontent.com/ElementMo/ProcessingTrickyMove/master/TrickyMove3/poses.json" target="_blank" rel="noopener">前景粒子Json文件</a></strong><br><strong><a href="https://raw.githubusercontent.com/ElementMo/ProcessingTrickyMove/master/TrickyMove3/bgposes.json" target="_blank" rel="noopener">背景粒子Json文件</a></strong></p>
+<p>将所有点绘制完毕后，按任意键即可存入json文件<br>由于涉及篇幅过长，工具代码暂时不展开讲解，如需讲解可以联系我</p>
+<p>此时，只需把 points 修改为由Json文件中获取的数据即可<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;PVector&gt; points = <span class="keyword">new</span> ArrayList&lt;PVector&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">375</span>, <span class="number">450</span>, P2D); <span class="comment">//画面分辨率和原图保持一致</span></span><br><span class="line">  colorMode(HSB);</span><br><span class="line">  strokeWeight(<span class="number">1.5</span>);</span><br><span class="line">  JSONArray poses = loadJSONArray(<span class="string">"poses.json"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;poses.size(); i++) &#123;</span><br><span class="line">    points.add(<span class="keyword">new</span> PVector(poses.getJSONArray(i).getFloat(<span class="number">0</span>), poses.getJSONArray(i).getFloat(<span class="number">1</span>)));</span><br><span class="line">  &#125; <span class="comment">//把随机生成位置  修改为从文件中获取位置</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;points.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;points.size(); j++) &#123;</span><br><span class="line">      <span class="keyword">float</span> dist = PVector.dist(points.get(i), points.get(j));</span><br><span class="line">      <span class="keyword">if</span> (i!=j &amp;&amp; dist &lt; <span class="number">100</span>) &#123; <span class="comment">//最大距离调整为100</span></span><br><span class="line">        beginShape(LINES);</span><br><span class="line">        stroke(random(<span class="number">255</span>), <span class="number">255</span>, <span class="number">255</span>, map(dist, <span class="number">0</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="number">20</span>));</span><br><span class="line">        vertex(points.get(i).x, points.get(i).y);</span><br><span class="line">        stroke(random(<span class="number">255</span>), <span class="number">255</span>, <span class="number">255</span>, map(dist, <span class="number">0</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="number">20</span>));</span><br><span class="line">        vertex(points.get(j).x, points.get(j).y);</span><br><span class="line">        endShape();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  noLoop();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img9.png">
+<h1 id="美化与文字渲染"><a href="#美化与文字渲染" class="headerlink" title="美化与文字渲染"></a>美化与文字渲染</h1><p>调整背景色，调整粒子颜色，添加背景粒子，添加半透明渐变图层<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;PVector&gt; points = <span class="keyword">new</span> ArrayList&lt;PVector&gt;();</span><br><span class="line">ArrayList&lt;PVector&gt; bgpoints = <span class="keyword">new</span> ArrayList&lt;PVector&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">375</span>, <span class="number">450</span>, P2D);</span><br><span class="line">  smooth(<span class="number">10</span>);</span><br><span class="line">  colorMode(HSB);</span><br><span class="line"></span><br><span class="line">  JSONArray poses = loadJSONArray(<span class="string">"poses.json"</span>);</span><br><span class="line">  JSONArray bgposes = loadJSONArray(<span class="string">"bgposes.json"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;poses.size(); i++) &#123;</span><br><span class="line">    points.add(<span class="keyword">new</span> PVector(poses.getJSONArray(i).getFloat(<span class="number">0</span>), poses.getJSONArray(i).getFloat(<span class="number">1</span>)));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;bgposes.size(); i++) &#123;</span><br><span class="line">    bgpoints.add(<span class="keyword">new</span> PVector(bgposes.getJSONArray(i).getFloat(<span class="number">0</span>), bgposes.getJSONArray(i).getFloat(<span class="number">1</span>)));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(#101F2D);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;bgpoints.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;bgpoints.size(); j++) &#123;</span><br><span class="line">      <span class="keyword">float</span> dist = PVector.dist(bgpoints.get(i), bgpoints.get(j));</span><br><span class="line">      <span class="keyword">if</span> (i!=j &amp;&amp; dist &lt; <span class="number">100</span>) &#123;</span><br><span class="line">        beginShape(LINES);</span><br><span class="line">        stroke(random(<span class="number">145</span>, <span class="number">150</span>), random(<span class="number">170</span>, <span class="number">190</span>), random(<span class="number">140</span>, <span class="number">170</span>), random(<span class="number">20</span>, <span class="number">130</span>));</span><br><span class="line">        strokeWeight(<span class="number">0.2</span>);</span><br><span class="line">        vertex(bgpoints.get(i).x, bgpoints.get(i).y);</span><br><span class="line">        stroke(random(<span class="number">145</span>, <span class="number">150</span>), random(<span class="number">170</span>, <span class="number">190</span>), random(<span class="number">140</span>, <span class="number">170</span>), random(<span class="number">20</span>, <span class="number">130</span>));</span><br><span class="line">        strokeWeight(<span class="number">1</span>);</span><br><span class="line">        vertex(bgpoints.get(j).x, bgpoints.get(j).y);</span><br><span class="line">        endShape();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;points.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;points.size(); j++) &#123;</span><br><span class="line">      <span class="keyword">float</span> dist = PVector.dist(points.get(i), points.get(j));</span><br><span class="line">      <span class="keyword">if</span> (i!=j &amp;&amp; dist &lt; <span class="number">100</span>) &#123;</span><br><span class="line">        beginShape(LINES);</span><br><span class="line">        stroke(random(<span class="number">40</span>, <span class="number">160</span>), random(<span class="number">20</span>, <span class="number">110</span>), random(<span class="number">180</span>, <span class="number">240</span>), random(<span class="number">40</span>, <span class="number">150</span>));</span><br><span class="line">        strokeWeight(<span class="number">0.5</span>);</span><br><span class="line">        vertex(points.get(i).x, points.get(i).y);</span><br><span class="line">        stroke(random(<span class="number">40</span>, <span class="number">160</span>), random(<span class="number">20</span>, <span class="number">110</span>), random(<span class="number">180</span>, <span class="number">240</span>), random(<span class="number">40</span>, <span class="number">150</span>));</span><br><span class="line">        strokeWeight(<span class="number">1.5</span>);</span><br><span class="line">        vertex(points.get(j).x, points.get(j).y);</span><br><span class="line">        endShape();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  beginShape();</span><br><span class="line">  noStroke();</span><br><span class="line">  fill(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  vertex(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  vertex(<span class="number">375</span>, <span class="number">0</span>);</span><br><span class="line">  fill(<span class="number">140</span>, <span class="number">150</span>, <span class="number">5</span>, <span class="number">210</span>);</span><br><span class="line">  vertex(<span class="number">375</span>, <span class="number">450</span>);</span><br><span class="line">  vertex(<span class="number">0</span>, <span class="number">450</span>);</span><br><span class="line">  endShape(CLOSE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img10.png">
+<p>最后，创建字体，绘制文字<br>Processing使用的封面字体名为：TheSerif HP5 Plain<br>根据位置将字体摆放恰当即可<br>字体文件可由此 <strong><a href="https://raw.githubusercontent.com/ElementMo/ProcessingTrickyMove/master/TrickyMove3/TrickyMove3_v2/TheSerif-HP5Plain.otf" target="_blank" rel="noopener">下载</a></strong><br>下载后安装到系统字库中即可调用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PFont font;</span><br><span class="line">font = createFont(<span class="string">"TheSerif HP5 Plain"</span>, <span class="number">50</span>);</span><br><span class="line"></span><br><span class="line">fill(<span class="number">255</span>);</span><br><span class="line">textFont(font, <span class="number">60</span>);</span><br><span class="line">text(<span class="string">"Processing 3"</span>, <span class="number">25</span>, <span class="number">216</span>);</span><br><span class="line">fill(#B0C4D0, 180);</span><br><span class="line">textFont(font, <span class="number">13</span>);</span><br><span class="line">text(<span class="string">"An Open project initiated by Ben Fry and Casey Reas."</span>, <span class="number">26</span>, <span class="number">260</span>);</span><br><span class="line">text(<span class="string">"Supported by programmers like you and the nonprofit"</span>, <span class="number">26</span>, <span class="number">278</span>);</span><br><span class="line">text(<span class="string">"Processing Foundation, 501(c)(3)."</span>, <span class="number">26</span>, <span class="number">296</span>);</span><br><span class="line">textFont(font, <span class="number">10</span>);</span><br><span class="line">text(<span class="string">"©  2012-2018 The Processing Foundation"</span>, <span class="number">26</span>, <span class="number">398</span>);</span><br><span class="line">text(<span class="string">"©  2004-2012 Ben Fry and Casey Reas"</span>, <span class="number">26</span>, <span class="number">411</span>);</span><br><span class="line">text(<span class="string">"©  2001-2004 Massachusetts Institude of Technology"</span>, <span class="number">26</span>, <span class="number">424</span>);</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/cover.gif">
+<h1 id="小作业"><a href="#小作业" class="headerlink" title="小作业"></a>小作业</h1><p>尝试不同风格的配色方案<br>找到一款你最喜欢的配色<br>发到群里即可获得红包包<br>>_&lt; （前提是不能太难看）</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2019/01/03/BaiAsk-vol-004/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -347,7 +532,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-30 18:00:17" itemprop="dateModified" datetime="2019-01-30T18:00:17+08:00">2019-01-30</time>
+                <time title="修改时间：2019-02-24 18:08:55" itemprop="dateModified" datetime="2019-02-24T18:08:55+08:00">2019-02-24</time>
               
             
           </span>
@@ -382,7 +567,8 @@
       
         
           
-            <p>大家嚎！我又回来啦~<br>我们先解答本期的问题：如何实现精确的旋转矩形相切<br>就像这样：<img src="/BaiAsk/2019/01/03/BaiAsk-vol-004/0.png"></p>
+            <p>本期知识点密度：★★✩✩✩</p>
+<p>大家嚎！我又回来啦~<br>我们先解答本期的问题：如何实现精确的旋转矩形相切<br>就像这样：<img src="/BaiAsk/2019/01/03/BaiAsk-vol-004/0.png"></p>
 <hr>
 <h4 id="问题剖析："><a href="#问题剖析：" class="headerlink" title="问题剖析："></a>问题剖析：</h4><p>想在大方块内绘制一个稍微小一点的方块，需要知道它的<strong>旋转角度</strong>和<strong>边长</strong></p>
 <p>旋转角度直截了当，只需使用rotate()函数每次旋转一个固定值即可，就像这样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">float</span> l=<span class="number">300</span>;</span><br><span class="line">  size(<span class="number">500</span>, <span class="number">500</span>);</span><br><span class="line">  rectMode(CENTER);</span><br><span class="line"></span><br><span class="line">  translate(width/<span class="number">2</span>, height/<span class="number">2</span>); <span class="comment">//将画布原点移动到屏幕中央</span></span><br><span class="line">  <span class="keyword">while</span> (l&gt;<span class="number">5</span>)               <span class="comment">//当边长大于5像素</span></span><br><span class="line">  &#123;</span><br><span class="line">    rotate(<span class="number">15</span>*DEG_TO_RAD);  <span class="comment">//每次旋转15度</span></span><br><span class="line">    rect(<span class="number">0</span>, <span class="number">0</span>, l, l);       <span class="comment">//绘制方形</span></span><br><span class="line">    l-=<span class="number">5</span>;                   <span class="comment">//方形边长每次减小5像素</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -512,7 +698,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-30 18:00:19" itemprop="dateModified" datetime="2019-01-30T18:00:19+08:00">2019-01-30</time>
+                <time title="修改时间：2019-02-24 18:01:51" itemprop="dateModified" datetime="2019-02-24T18:01:51+08:00">2019-02-24</time>
               
             
           </span>
@@ -548,6 +734,7 @@
         
           
             <!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script> -->
+<p>本期知识点密度：★★★✩✩</p>
 <h4 id="点和圆的接触"><a href="#点和圆的接触" class="headerlink" title="点和圆的接触"></a>点和圆的接触</h4><p>初中数学曾经学过：圆的判定公式</p>
 <p>$$x^2+y^2=r^2$$</p>
 <p>所以想要求解一点是否在圆内，只需判断 \(x^2+y^2\) 和 \(r^2\) 的关系即可；<br><br>前者大于后者，则意味着点在圆外<br><br>前者小于后者，则意味着点在圆内<br><br>前者等于后者，则意味着点在圆上<br></p>
@@ -704,7 +891,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-30 16:19:34" itemprop="dateModified" datetime="2019-01-30T16:19:34+08:00">2019-01-30</time>
+                <time title="修改时间：2019-02-24 18:01:28" itemprop="dateModified" datetime="2019-02-24T18:01:28+08:00">2019-02-24</time>
               
             
           </span>
@@ -739,7 +926,8 @@
       
         
           
-            <h1 id="角度与弧度的转换"><a href="#角度与弧度的转换" class="headerlink" title="角度与弧度的转换"></a>角度与弧度的转换</h1><h4 id="radians-和-degrees"><a href="#radians-和-degrees" class="headerlink" title="radians() 和 degrees()"></a>radians() 和 degrees()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">println(radians(<span class="number">180</span>));  <span class="comment">// 3.1415927</span></span><br><span class="line">println(degrees(PI));   <span class="comment">// 180.0</span></span><br></pre></td></tr></table></figure>
+            <p>本期知识点密度：★✩✩✩✩</p>
+<h1 id="角度与弧度的转换"><a href="#角度与弧度的转换" class="headerlink" title="角度与弧度的转换"></a>角度与弧度的转换</h1><h4 id="radians-和-degrees"><a href="#radians-和-degrees" class="headerlink" title="radians() 和 degrees()"></a>radians() 和 degrees()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">println(radians(<span class="number">180</span>));  <span class="comment">// 3.1415927</span></span><br><span class="line">println(degrees(PI));   <span class="comment">// 180.0</span></span><br></pre></td></tr></table></figure>
 <p>这应该是最正式的回答了</p>
 <p>然而，作为Java的衍生产物，Processing支持非常多的Java特性；<br>其中，就包括我们接下来要说的：<br>Java的数学函数库：java.lang.Math;</p>
 <hr>
@@ -869,7 +1057,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-30 18:00:18" itemprop="dateModified" datetime="2019-01-30T18:00:18+08:00">2019-01-30</time>
+                <time title="修改时间：2019-02-24 23:58:44" itemprop="dateModified" datetime="2019-02-24T23:58:44+08:00">2019-02-24</time>
               
             
           </span>
@@ -904,11 +1092,12 @@
       
         
           
-            <p><strong>Processing 一共有7种绘制模式，9种写法</strong></p>
+            <p>本期知识点密度：★★✩✩✩</p>
+<p><strong>Processing 一共有7种绘制模式，9种写法</strong></p>
 <ul>
 <li>置空</li>
 <li>JAVA2D（等价于置空）</li>
-<li>P2D</li>
+<li>P2D （是OPENGL的子集）</li>
 <li>P3D</li>
 <li>OPENGL（等价于P3D）</li>
 <li>FX2D</li>
@@ -1188,7 +1377,7 @@
                 
                   <a href="/BaiAsk/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1404,6 +1593,8 @@
 
   
   
+    
+      
     
       
         
