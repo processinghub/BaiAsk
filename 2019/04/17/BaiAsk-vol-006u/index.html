@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/BaiAsk/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/BaiAsk/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/BaiAsk/images/bai.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/BaiAsk/images/bai-32.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/BaiAsk/images/bai-16.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/BaiAsk/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/BaiAsk/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本期知识点密度：★★★✩✩ 本期要做的事：用一个sketch生成 好多 好多 好多 好多 好多 个窗口 本期主要内容：  一：玩转Processing窗口属性 二：Processing的本质 三：如何生成好多窗口  太长不看版：12345● 一个普通的类不能生成窗口● 一个类继承了PApplet，它就可以生成一个窗口● 想要好多窗口，就写好多继承PApplet的类● 通过surface.setLo">
+<meta name="keywords" content="Processing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【第六期（上）】窗口多开">
+<meta property="og:url" content="https://aalab-cn.github.io/BaiAsk/2019/04/17/BaiAsk-vol-006u/index.html">
+<meta property="og:site_name" content="白问">
+<meta property="og:description" content="本期知识点密度：★★★✩✩ 本期要做的事：用一个sketch生成 好多 好多 好多 好多 好多 个窗口 本期主要内容：  一：玩转Processing窗口属性 二：Processing的本质 三：如何生成好多窗口  太长不看版：12345● 一个普通的类不能生成窗口● 一个类继承了PApplet，它就可以生成一个窗口● 想要好多窗口，就写好多继承PApplet的类● 通过surface.setLo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2019/04/17/BaiAsk-vol-006u/running.png">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2019/04/17/BaiAsk-vol-006u/P5Code.png">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2019/04/17/BaiAsk-vol-006u/JavaCode.png">
+<meta property="og:image" content="https://aalab-cn.github.io/BaiAsk/2019/04/17/BaiAsk-vol-006u/ManyWindow.png">
+<meta property="og:updated_time" content="2019-04-19T07:13:53.178Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【第六期（上）】窗口多开">
+<meta name="twitter:description" content="本期知识点密度：★★★✩✩ 本期要做的事：用一个sketch生成 好多 好多 好多 好多 好多 个窗口 本期主要内容：  一：玩转Processing窗口属性 二：Processing的本质 三：如何生成好多窗口  太长不看版：12345● 一个普通的类不能生成窗口● 一个类继承了PApplet，它就可以生成一个窗口● 想要好多窗口，就写好多继承PApplet的类● 通过surface.setLo">
+<meta name="twitter:image" content="https://aalab-cn.github.io/BaiAsk/2019/04/17/BaiAsk-vol-006u/running.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://aalab-cn.github.io/BaiAsk/2019/04/17/BaiAsk-vol-006u/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【第六期（上）】窗口多开 | 白问</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/BaiAsk/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白问</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/BaiAsk/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2019/04/17/BaiAsk-vol-006u/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="墨白">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/BaiAsk/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白问">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【第六期（上）】窗口多开
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-17 16:02:26" itemprop="dateCreated datePublished" datetime="2019-04-17T16:02:26+08:00">2019-04-17</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-19 15:13:53" itemprop="dateModified" datetime="2019-04-19T15:13:53+08:00">2019-04-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本期知识点密度：★★★✩✩</p>
+<p>本期要做的事：<br>用一个sketch生成 <b>好多 好多 好多 好多 好多</b> 个窗口</p>
+<p>本期主要内容：</p>
+<ul>
+<li>一：玩转Processing窗口属性</li>
+<li>二：Processing的本质</li>
+<li>三：如何生成好多窗口</li>
+</ul>
+<p><strong>太长不看版：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">● 一个普通的类不能生成窗口</span><br><span class="line">● 一个类继承了PApplet，它就可以生成一个窗口</span><br><span class="line">● 想要好多窗口，就写好多继承PApplet的类</span><br><span class="line">● 通过surface.setLocation();改变窗口位置即可</span><br><span class="line">● 前往文章末尾拷贝代码</span><br></pre></td></tr></table></figure></p>
+<p><b>下面开始逐个讲解：</b></p>
+<h1 id="玩转Processing窗口属性"><a href="#玩转Processing窗口属性" class="headerlink" title="玩转Processing窗口属性"></a>玩转Processing窗口属性</h1><p>在 <a href="./2018/12/07/BaiAsk_vol_001/">第一期</a> 中，我们讲过7种绘制模式，本期需要用的绘制模式，是JAVA2D；<br>在这种绘制模式中，窗口载体使用的是 java.awt.Frame（在2.x中可以直接访问该frame对象），也就意味着，我们可以根据Frame的特性来自定义窗口的各项参数。</p>
+<p>在Processing 3.x中，官方为了跨平台兼容，将frame进一步封装为一个PSurface对象：surface.<br>所以我们需要调用surface，对Processing的窗口，进行魔改。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PImage icon;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  icon = loadImage(<span class="string">"bai-32.png"</span>);<span class="comment">//载入图标文件</span></span><br><span class="line">  size(<span class="number">300</span>, <span class="number">200</span>);</span><br><span class="line">  background(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  surface.setSize(<span class="number">500</span>, <span class="number">500</span>);    <span class="comment">//重设窗口大小</span></span><br><span class="line">  surface.setLocation(<span class="number">0</span>, <span class="number">0</span>);    <span class="comment">//设置窗口位置</span></span><br><span class="line">  surface.setTitle(<span class="string">"Ohhhh!!!!"</span>);<span class="comment">//设置窗口标题</span></span><br><span class="line">  surface.setIcon(icon);        <span class="comment">//设置窗口图标</span></span><br><span class="line">  surface.setAlwaysOnTop(<span class="keyword">true</span>); <span class="comment">//设置是否窗口保持置顶</span></span><br><span class="line">  surface.setResizable(<span class="keyword">true</span>);   <span class="comment">//设置窗口可变</span></span><br><span class="line">  surface.setCursor(HAND);      <span class="comment">//设置鼠标样式 ARROW, CROSS, HAND, MOVE, TEXT, WAIT</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>留意窗口的变化：</p>
+<ul>
+<li>窗口并非是size中定义的300×200，而是被重设为了500×500</li>
+<li>窗口自身的位置被调整到左上角(0, 0)点</li>
+<li>窗口的标题变成了“Ohhhh!!!!”</li>
+<li>窗口图标变成了我们自定义的图标</li>
+<li>窗口始终置顶</li>
+<li>窗口大小可随意拖拽</li>
+<li>鼠标样式变成了小手<img src="/BaiAsk/2019/04/17/BaiAsk-vol-006u/running.png">
+这个例子中，我们只选择了一些常用的函数进行演示，更多相关功能请参考 <a href="https://github.com/processing/processing" target="_blank" rel="noopener">Processing源码</a></li>
+</ul>
+<hr>
+<h1 id="Processing的本质"><a href="#Processing的本质" class="headerlink" title="Processing的本质"></a>Processing的本质</h1><p><strong>————以下是硬核技术时间————</strong><br>在Processing中，我们会经常使用到class，也就是“类”<br>但Processing的“类”与其他编程语言中常见的“类”并不相同<br>它们的本质是Java的 <b><a href="https://en.wikipedia.org/wiki/Inner_class" target="_blank" rel="noopener">内部类</a></b><br>这个特性也造就了Processing的设计理念：<b><a href="https://en.wikipedia.org/wiki/Facade_pattern" target="_blank" rel="noopener">Wrapper Facade</a></b><br>意味着用户无需考虑复杂的内部实现原理，直接通过清晰简单的接口来实现功能。（这种设计哲学也是我喜欢Processing的原因之一）</p>
+<p>再聊聊Processing的代码封装<br>用户在PDE中写的所有代码，都会被二次加工成Java代码，再丢进Java虚拟机中运行。<br>比如用户只写了一段简单的代码：<img src="/BaiAsk/2019/04/17/BaiAsk-vol-006u/P5Code.png">但最终运行的代码被加工成了这样：<img src="/BaiAsk/2019/04/17/BaiAsk-vol-006u/JavaCode.png"><br>可以发现：</p>
+<ul>
+<li>最前面import了很多东西</li>
+<li>用户写的所有的代码被放在了一个更大的class里面，class名与PDE工程名相同，并继承了PApplet</li>
+<li>size()函数被移动到了一个新的函数void settings()里面</li>
+<li>void setup()中的内容除了size之外直接照搬</li>
+<li>void draw()里的内容直接照搬</li>
+<li>后面加上了主函数，也就是程序入口</li>
+</ul>
+<p><strong>——————硬核时间结束——————</strong><br>这些都是Processing为了降低编程复杂度而做的功课，目的就是为了把初学者和繁琐的步骤隔离开，把写代码变成一种乐趣。<br>但是现在，我们要离开这个精致的温室，去探究它的本源了</p>
+<hr>
+<h1 id="生成好多窗口"><a href="#生成好多窗口" class="headerlink" title="生成好多窗口"></a>生成好多窗口</h1><p>我们在上面提到过，加工后的代码被放进了一个大类里面，而且继承了PApplet<br>原因是每一个继承了PApplet的类都可以成为一个完整的Processing程序<br>它有自己的窗口，有自己的void setup()和void draw()…</p>
+<p>如果我们想要生成新的窗口，就需要再写一个继承PApplet的类，就像这样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Inner in1 = <span class="keyword">new</span> Inner();</span><br><span class="line">  Inner in2 = <span class="keyword">new</span> Inner();</span><br><span class="line">  Inner in3 = <span class="keyword">new</span> Inner();</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Inner</span> <span class="keyword">extends</span> <span class="title">PApplet</span> </span>&#123;  <span class="comment">//继承了PApplet</span></span><br><span class="line">  Inner() &#123;                    <span class="comment">//构造函数</span></span><br><span class="line">    <span class="keyword">super</span>();                   <span class="comment">//先执行父类的构造函数</span></span><br><span class="line">    PApplet.runSketch(<span class="keyword">new</span> String[]&#123;<span class="string">"Inner"</span>&#125;, <span class="keyword">this</span>);<span class="comment">//然后运行自己</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码可以直接生成四个窗口（一个原窗口+三个新窗口）<br>又由于我们离开了精致的温室，不能再在void setup()里写size了，所以如果要设置窗体大小，void settings()函数也需要老老实实加上：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Inner[] inners = <span class="keyword">new</span> Inner[<span class="number">50</span>]; <span class="comment">//创建一个数组存储这些窗口</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">settings</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">300</span>, <span class="number">200</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">255</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;inners.length; i++) &#123;</span><br><span class="line">    inners[i] = <span class="keyword">new</span> Inner();    <span class="comment">//初始化每个窗口</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Inner</span> <span class="keyword">extends</span> <span class="title">PApplet</span> </span>&#123;</span><br><span class="line">  Inner() &#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    PApplet.runSketch(<span class="keyword">new</span> String[]&#123;<span class="string">"Inner"</span>&#125;, <span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">settings</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    size(<span class="number">200</span>, <span class="number">200</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    surface.setLocation((<span class="keyword">int</span>)random(<span class="number">1920</span>), (<span class="keyword">int</span>)random(<span class="number">1080</span>));<span class="comment">//随机设置每个窗口的位置，并设置背景色</span></span><br><span class="line">    background(<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/04/17/BaiAsk-vol-006u/ManyWindow.png">
+<ul>
+<li>【第六期（上）】，已经讲解完毕，我们已经实现了创建多个窗口，并且知道了如何改变每个窗口的位置。</li>
+<li>【第六期（中）】，我们会暂时搁置本期内容，用最基础的（画圆圈的）方式，讲一讲吸引和排斥的实现原理</li>
+<li>【第六期（下）】，我们会将前两期的内容结合起来，实现窗口之间互相吸引与排斥的效果</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/BaiAsk/tags/Processing/" rel="tag"># Processing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/BaiAsk/2019/02/24/BaiAsk-vol-005/" rel="next" title="【第五期】制作PDE启动画面">
+                <i class="fa fa-chevron-left"></i> 【第五期】制作PDE启动画面
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/BaiAsk/images/avatar2.jpg" alt="墨白">
+            
+              <p class="site-author-name" itemprop="name">墨白</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/BaiAsk/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/BaiAsk/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#玩转Processing窗口属性"><span class="nav-number">1.</span> <span class="nav-text">玩转Processing窗口属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Processing的本质"><span class="nav-number">2.</span> <span class="nav-text">Processing的本质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成好多窗口"><span class="nav-number">3.</span> <span class="nav-text">生成好多窗口</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">墨白</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/BaiAsk/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/BaiAsk/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/BaiAsk/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/BaiAsk/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/BaiAsk/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/BaiAsk/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/BaiAsk/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
