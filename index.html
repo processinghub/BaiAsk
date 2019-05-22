@@ -285,6 +285,334 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2019/05/22/BaiAsk-vol-006mToxi/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="墨白">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/BaiAsk/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白问">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/BaiAsk/2019/05/22/BaiAsk-vol-006mToxi/" class="post-title-link" itemprop="url">【第六期（中）】太长不看版</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-22 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-22T00:00:00+08:00">2019-05-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-23 00:27:12" itemprop="dateModified" datetime="2019-05-23T00:27:12+08:00">2019-05-23</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>为什么要重复造轮子<br>直接用库才对嘛</p>
+<ul>
+<li>下载Toxi库</li>
+<li>复制以下代码</li>
+<li>完成<img src="/BaiAsk/2019/05/22/BaiAsk-vol-006mToxi/ma.png" width="120" height="80">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> toxi.geom.*;</span><br><span class="line"><span class="keyword">import</span> toxi.physics2d.*;</span><br><span class="line"><span class="keyword">import</span> toxi.physics2d.behaviors.*;</span><br><span class="line">VerletPhysics2D physics;</span><br><span class="line">AttractionBehavior2D mouseAttractor;</span><br><span class="line">Vec2D mouse;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">500</span>, <span class="number">500</span>, FX2D);</span><br><span class="line">  noFill();</span><br><span class="line">  physics = <span class="keyword">new</span> VerletPhysics2D();</span><br><span class="line">  physics.setDrag(<span class="number">0.30f</span>);</span><br><span class="line">  addParticle();  </span><br><span class="line">  mouse = <span class="keyword">new</span> Vec2D(mouseX, mouseY);</span><br><span class="line">  mouseAttractor = <span class="keyword">new</span> AttractionBehavior2D(mouse, <span class="number">500</span>, <span class="number">0.2</span>);</span><br><span class="line">  physics.addBehavior(mouseAttractor);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">255</span>);</span><br><span class="line">  mouse.set(mouseX, mouseY);</span><br><span class="line">  physics.particles.get(<span class="number">0</span>).x = mouseX;</span><br><span class="line">  physics.particles.get(<span class="number">0</span>).y = mouseY;  </span><br><span class="line">  <span class="keyword">if</span> (mousePressed) &#123;</span><br><span class="line">    addParticle();</span><br><span class="line">  &#125;</span><br><span class="line">  physics.update();</span><br><span class="line">  <span class="keyword">for</span> (VerletParticle2D p : physics.particles) &#123;</span><br><span class="line">    ellipse(p.x, p.y, <span class="number">20</span>, <span class="number">20</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addParticle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  VerletParticle2D p = <span class="keyword">new</span> VerletParticle2D(Vec2D.randomVector().scale(<span class="number">5</span>).addSelf(mouseX, mouseY));</span><br><span class="line">  physics.addParticle(p);</span><br><span class="line">  physics.addBehavior(<span class="keyword">new</span> AttractionBehavior2D(p, <span class="number">20</span>, -<span class="number">1.2f</span>, <span class="number">0.01f</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2019/04/21/BaiAsk-vol-006m/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="墨白">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/BaiAsk/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白问">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/BaiAsk/2019/04/21/BaiAsk-vol-006m/" class="post-title-link" itemprop="url">【第六期（中）】吸引与排斥</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-21 00:00:00" itemprop="dateCreated datePublished" datetime="2019-04-21T00:00:00+08:00">2019-04-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-23 00:30:15" itemprop="dateModified" datetime="2019-05-23T00:30:15+08:00">2019-05-23</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本期知识点密度：★★★✩✩</p>
+<p>本期要做的事：<br>做出吸引和排斥共存的效果<br><img src="/BaiAsk/2019/04/21/BaiAsk-vol-006m/repel2.gif" width="300" height="300"></p>
+<p>如果觉得太长太麻烦<br>可以直接移步<a href="https://aalab-cn.github.io/BaiAsk/2019/05/22/BaiAsk-vol-006mToxi/ ">【太长不看版】</a></p>
+<p>本期主要内容：</p>
+<ul>
+<li>一：Processing中的向量（PVector）</li>
+<li>二：求解物体之间的排斥</li>
+<li>三：同时施加吸引与排斥</li>
+</ul>
+<h1 id="Processing中的向量（PVector）"><a href="#Processing中的向量（PVector）" class="headerlink" title="Processing中的向量（PVector）"></a>Processing中的向量（PVector）</h1><p>向量（Vector）是制作动态图形必不可少的工具之一<br>它可以方便的表示物体的位置、速度、加速度等状态，也可以求解物体之间的空间关系；<br>Processing为我们提供了原生的向量数据类型：<a href="https://processing.org/reference/PVector.html" target="_blank" rel="noopener"><b>PVector</b></a><br>这样的话，我们就可以使用PVector内置的函数来方便的实现物体间力的施加。<br>下面是一个简单的使用向量的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PVector v1, v2;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  v1 = <span class="keyword">new</span> PVector(<span class="number">40</span>, <span class="number">20</span>);</span><br><span class="line">  v2 = <span class="keyword">new</span> PVector(<span class="number">25</span>, <span class="number">50</span>);</span><br><span class="line"></span><br><span class="line">  line(<span class="number">0</span>, <span class="number">0</span>, v1.x, v1.y);</span><br><span class="line">  line(<span class="number">0</span>, <span class="number">0</span>, v2.x, v2.y);</span><br><span class="line">  v2.add(v1);</span><br><span class="line">  line(<span class="number">0</span>, <span class="number">0</span>, v2.x, v2.y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码定义了两个不同的向量，并分别将他们绘制；<br>之后再将两个向量相加，绘制出相加后的向量；<br>向量的更多具体用法，大家可以查看File——Examples——Topics——Vectors里的几个例子：<img src="/BaiAsk/2019/04/21/BaiAsk-vol-006m/VectorExamples.png" width="300" height="600"></p>
+<h1 id="求解物体之间的排斥"><a href="#求解物体之间的排斥" class="headerlink" title="求解物体之间的排斥"></a>求解物体之间的排斥</h1><p>对于求解排斥的问题，最容易产生关联的的就是求解“<strong>流体</strong>”之间的作用力，在计算机图形学界，求解流体有两大方向，分为欧式方法（Eulerial Methods）和拉式方法（Lagrangian Methods），在拉式方法中，流体是由粒子的集合所刻画，其中最为常用的是 <a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" target="_blank" rel="noopener">SPH(Smoothed Particle Hydrodynamics) <strong>平滑粒子动力学</strong></a> 和它的一些改进算法<img src="/BaiAsk/2019/04/21/BaiAsk-vol-006m/sph.jpg" width="600" height="600">这个方法的确可以很好的求解由粒子刻画的的无边界流体的运动状态；<br><b>然而<br>我们是一个新手向的入门级教程<br>教SPH太反人类了</b><br>所以我们接下来会用最简单的向量操作<br>借用拉格朗日方法的思想<br>来初步模拟粒子排斥的问题：<br><img src="/BaiAsk/2019/04/21/BaiAsk-vol-006m/GraphM3.png" width="400" height="400"><br>假设有两个粒子：A、B<br>他们的位置为 \(\vec A\)、\(\vec B\)，半径分别为 \(\vec RA\)、\(\vec RB\)<br>那么，两个粒子的间距用向量表示为 \(\vec B- \vec A\)，两个粒子的半径之和为 \(\vec RA + \vec RB\)<br>根据示意图，两个半径相加相当于把 <strong>重叠部分计算了两次</strong>，所以可以用半径之和减去间距，计算出重叠部分的向量。<br>也就是：\((\vec B - \vec A)   - (\vec RA + \vec RB)\)<br>求出了粒子碰撞后重叠部分的距离之后<br>接下来需要根据重叠的程度来施加排斥<br>因为两个粒子只需要移动重叠部分一半的距离即可分离开<br>那么实际（给A粒子）施加的排斥向量是：\(\frac{(\vec B - \vec A)   - (\vec RA + \vec RB)}{2}\)<br>同理，给B粒子施加相反的向量即可：\(-\frac{(\vec B - \vec A)   - (\vec RA + \vec RB)}{2}\)<br>用代码表示为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">repel</span><span class="params">(PVector A, PVector B)</span> </span>&#123;</span><br><span class="line">  PVector BsubA = PVector.sub(B, A);  <span class="comment">//向量B-A</span></span><br><span class="line">  PVector RAaddRB = BsubA.copy();     <span class="comment">//由于粒子每次碰撞的方向不同，所以半径向量需要根据碰撞方向来确定，故复制了向量B-A</span></span><br><span class="line">  RAaddRB.normalize();                <span class="comment">//归一化RA+RB向量</span></span><br><span class="line">  RAaddRB.mult(Radians*<span class="number">2</span>);            <span class="comment">//将RA+RB扩大到两个半径之和</span></span><br><span class="line">  PVector RepelA = PVector.sub(BsubA, RAaddRB);<span class="comment">//计算重叠部分的向量</span></span><br><span class="line">  RepelA.mult(<span class="number">0.5</span>);                   <span class="comment">//重叠部分减半</span></span><br><span class="line">  A.add(RepelA);                      <span class="comment">//对A粒子施加排斥</span></span><br><span class="line">  B.add(RepelA.mult(-<span class="number">1</span>));             <span class="comment">//对B粒子施加排斥</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/04/21/BaiAsk-vol-006m/repel.gif" width="300" height="300">
+<p>完整代码为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> Radians = <span class="number">10</span>;</span><br><span class="line">ArrayList&lt;PVector&gt; points = <span class="keyword">new</span> ArrayList&lt;PVector&gt;();</span><br><span class="line">PVector mouse;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">500</span>, <span class="number">500</span>, FX2D);</span><br><span class="line">  noFill();</span><br><span class="line">  points.add(PVector.random2D());</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">255</span>);</span><br><span class="line">  mouse = <span class="keyword">new</span> PVector(mouseX, mouseY);</span><br><span class="line">  points.get(<span class="number">0</span>).x = mouseX;</span><br><span class="line">  points.get(<span class="number">0</span>).y = mouseY;</span><br><span class="line">  <span class="keyword">if</span> (mousePressed) &#123;</span><br><span class="line">    mouse.add(PVector.random2D());</span><br><span class="line">    points.add(mouse);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;points.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;points.size(); j++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (i!=j &amp;&amp; PVector.dist(points.get(i), points.get(j)) &lt;= Radians*<span class="number">2</span>) &#123;</span><br><span class="line">        repel(points.get(i), points.get(j));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (PVector p : points) &#123;</span><br><span class="line">    PVector relative = PVector.sub(mouse, p);</span><br><span class="line">    relative.normalize();</span><br><span class="line">    p.add(relative);</span><br><span class="line">    ellipse(p.x, p.y, Radians*<span class="number">2</span>, Radians*<span class="number">2</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">repel</span><span class="params">(PVector A, PVector B)</span> </span>&#123;</span><br><span class="line">  PVector BsubA = PVector.sub(B, A);</span><br><span class="line">  PVector RAaddRB = BsubA.copy();</span><br><span class="line">  RAaddRB.normalize();</span><br><span class="line">  RAaddRB.mult(Radians*<span class="number">2</span>);</span><br><span class="line">  PVector RepelA = PVector.sub(BsubA, RAaddRB);</span><br><span class="line">  RepelA.mult(<span class="number">0.5</span>);</span><br><span class="line">  A.add(RepelA);</span><br><span class="line">  B.add(RepelA.mult(-<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<img src="/BaiAsk/2019/04/21/BaiAsk-vol-006m/result.gif" width="300" height="300">
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://aalab-cn.github.io/BaiAsk/BaiAsk/2019/04/17/BaiAsk-vol-006u/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -347,7 +675,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-04-19 15:13:53" itemprop="dateModified" datetime="2019-04-19T15:13:53+08:00">2019-04-19</time>
+                <time title="修改时间：2019-04-21 10:59:10" itemprop="dateModified" datetime="2019-04-21T10:59:10+08:00">2019-04-21</time>
               
             
           </span>
@@ -403,7 +731,7 @@
 <li>窗口始终置顶</li>
 <li>窗口大小可随意拖拽</li>
 <li>鼠标样式变成了小手<img src="/BaiAsk/2019/04/17/BaiAsk-vol-006u/running.png">
-这个例子中，我们只选择了一些常用的函数进行演示，更多相关功能请参考 <a href="https://github.com/processing/processing" target="_blank" rel="noopener">Processing源码</a></li>
+这个例子中，我们只选择了一些常用的函数进行演示，更多相关功能请参考 <a href="https://github.com/processing/processing/blob/master/core/src/processing/core/PSurface.java" target="_blank" rel="noopener">Processing源码</a></li>
 </ul>
 <hr>
 <h1 id="Processing的本质"><a href="#Processing的本质" class="headerlink" title="Processing的本质"></a>Processing的本质</h1><p><strong>————以下是硬核技术时间————</strong><br>在Processing中，我们会经常使用到class，也就是“类”<br>但Processing的“类”与其他编程语言中常见的“类”并不相同<br>它们的本质是Java的 <b><a href="https://en.wikipedia.org/wiki/Inner_class" target="_blank" rel="noopener">内部类</a></b><br>这个特性也造就了Processing的设计理念：<b><a href="https://en.wikipedia.org/wiki/Facade_pattern" target="_blank" rel="noopener">Wrapper Facade</a></b><br>意味着用户无需考虑复杂的内部实现原理，直接通过清晰简单的接口来实现功能。（这种设计哲学也是我喜欢Processing的原因之一）</p>
@@ -545,7 +873,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-25 11:12:06" itemprop="dateModified" datetime="2019-02-25T11:12:06+08:00">2019-02-25</time>
+                <time title="修改时间：2019-04-21 11:21:47" itemprop="dateModified" datetime="2019-04-21T11:21:47+08:00">2019-04-21</time>
               
             
           </span>
@@ -611,7 +939,6 @@
 <img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/img10.png">
 <p>最后，创建字体，绘制文字<br>Processing使用的封面字体名为：TheSerif HP5 Plain<br>字体文件可由此 <strong><a href="https://raw.githubusercontent.com/ElementMo/ProcessingTrickyMove/master/TrickyMove3/TrickyMove3_v2/TheSerif-HP5Plain.otf" target="_blank" rel="noopener">下载</a></strong><br>下载后安装到系统字库中即可调用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PFont font;</span><br><span class="line">font = createFont(<span class="string">"TheSerif HP5 Plain"</span>, <span class="number">50</span>);</span><br><span class="line"></span><br><span class="line">fill(<span class="number">255</span>);</span><br><span class="line">textFont(font, <span class="number">60</span>);</span><br><span class="line">text(<span class="string">"Processing 3"</span>, <span class="number">25</span>, <span class="number">216</span>);</span><br><span class="line">fill(#B0C4D0, 180);</span><br><span class="line">textFont(font, <span class="number">13</span>);</span><br><span class="line">text(<span class="string">"An Open project initiated by Ben Fry and Casey Reas."</span>, <span class="number">26</span>, <span class="number">260</span>);</span><br><span class="line">text(<span class="string">"Supported by programmers like you and the nonprofit"</span>, <span class="number">26</span>, <span class="number">278</span>);</span><br><span class="line">text(<span class="string">"Processing Foundation, 501(c)(3)."</span>, <span class="number">26</span>, <span class="number">296</span>);</span><br><span class="line">textFont(font, <span class="number">10</span>);</span><br><span class="line">text(<span class="string">"©  2012-2018 The Processing Foundation"</span>, <span class="number">26</span>, <span class="number">398</span>);</span><br><span class="line">text(<span class="string">"©  2004-2012 Ben Fry and Casey Reas"</span>, <span class="number">26</span>, <span class="number">411</span>);</span><br><span class="line">text(<span class="string">"©  2001-2004 Massachusetts Institude of Technology"</span>, <span class="number">26</span>, <span class="number">424</span>);</span><br></pre></td></tr></table></figure></p>
 <img src="/BaiAsk/2019/02/24/BaiAsk-vol-005/cover.gif">
-<h1 id="小作业"><a href="#小作业" class="headerlink" title="小作业"></a>小作业</h1><p>自由修改Processing启动界面的风格和样式<br>尝试不同风格的配色方案<br>找到一款你最喜欢的配色<br>发到群里即可获得红包包<br>>_&lt; （前提是不能太难看）</p>
 
           
         
@@ -730,7 +1057,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-24 18:08:55" itemprop="dateModified" datetime="2019-02-24T18:08:55+08:00">2019-02-24</time>
+                <time title="修改时间：2019-02-24 18:08:56" itemprop="dateModified" datetime="2019-02-24T18:08:56+08:00">2019-02-24</time>
               
             
           </span>
@@ -896,7 +1223,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-25 03:32:16" itemprop="dateModified" datetime="2019-02-25T03:32:16+08:00">2019-02-25</time>
+                <time title="修改时间：2019-02-25 03:32:18" itemprop="dateModified" datetime="2019-02-25T03:32:18+08:00">2019-02-25</time>
               
             
           </span>
@@ -1089,7 +1416,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-24 18:01:28" itemprop="dateModified" datetime="2019-02-24T18:01:28+08:00">2019-02-24</time>
+                <time title="修改时间：2019-02-24 18:01:30" itemprop="dateModified" datetime="2019-02-24T18:01:30+08:00">2019-02-24</time>
               
             
           </span>
@@ -1255,7 +1582,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-25 03:32:00" itemprop="dateModified" datetime="2019-02-25T03:32:00+08:00">2019-02-25</time>
+                <time title="修改时间：2019-02-25 03:32:02" itemprop="dateModified" datetime="2019-02-25T03:32:02+08:00">2019-02-25</time>
               
             
           </span>
@@ -1452,7 +1779,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-30 18:01:10" itemprop="dateModified" datetime="2019-01-30T18:01:10+08:00">2019-01-30</time>
+                <time title="修改时间：2019-01-30 18:01:12" itemprop="dateModified" datetime="2019-01-30T18:01:12+08:00">2019-01-30</time>
               
             
           </span>
@@ -1575,7 +1902,7 @@
                 
                   <a href="/BaiAsk/archives/">
                 
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1791,6 +2118,10 @@
 
   
   
+    
+      
+    
+      
     
       
     
